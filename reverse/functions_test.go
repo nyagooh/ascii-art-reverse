@@ -23,7 +23,7 @@ func TestReadBannerFile(t *testing.T) {
 		t.Fatalf("Failed to close temporary file: %v", err)
 	}
 	// Test ReadBannerFile function
-	bannerContent, err := ReadBannerFile(tmpFile.Name())
+	bannerContent, err := ReadTextFile(tmpFile.Name())
 	if err != nil {
 		t.Errorf("ReadBannerFile returned error: %v", err)
 	}

@@ -45,7 +45,7 @@ func main() {
 	if options.BannerFile == "" {
 		options.BannerFile = "standard"
 	}
-	bannerFile, err := reverse.ReadBannerFile("./banners/" + options.BannerFile + ".txt")
+	bannerFile, err := reverse.ReadTextFile("./banners/" + options.BannerFile + ".txt")
 	check(err)
 
 	// Create map of ASCII art

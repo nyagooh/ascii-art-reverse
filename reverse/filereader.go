@@ -1,14 +1,20 @@
 package reverse
 
 import (
+	"fmt"
 	"os"
+	"strings"
 )
 
 // ReadBannerFile reads the content of a banner file specified by the filepath argument and returns it as a string.
-func ReadBannerFile(filepath string) (string, error) {
-	bannerFile, err := os.ReadFile(filepath)
+func ReadTextFile(filepath string) (string, error) {
+	if !strings.HasSuffix(filepath,".txt") {
+		return "",fmt.Errorf("error: the file must be a text file with a .txt extension")
+	}
+
+	fileContent, err := os.ReadFile(filepath)
 	if err != nil {
 		return "", err
 	}
-	return string(bannerFile), nil
+	return string(fileContent), nil
 }
