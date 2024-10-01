@@ -12,6 +12,7 @@ type Options struct {
 	ColorizeLetters string
 	InputText       string
 	BannerFile      string
+	ReverseFlag     string
 }
 
 // ParseOptions function parses command-line arguments to extract color options, text to be colored, file to output the data, and banner file name.
@@ -20,10 +21,13 @@ func ParseOptions() (Options, error) {
 	var options Options
 	flag.StringVar(&options.ColorFlag, "color", "", "Usage: go run . [OPTION] [STRING]\n\nEX: go run . --color=<color> <substring to be colored> \"something\"\n")
 	flag.StringVar(&options.OutputFlag, "output", "", "Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> \"something\" standard")
+	flag.StringVar(&options.ReverseFlag, "reverse", "", "Usage: go run . [OPTION]\n\nEX: go run . --reverse=<fileName.txt>")
 	flag.Parse()
 
 	// Determine the number of arguments and parse accordingly
 	switch len(flag.Args()) {
+	case 0:
+		return options,nil
 	case 1: // One argument: input text
 		options.InputText = flag.Arg(0)
 	case 2:
