@@ -15,6 +15,7 @@ func main() {
 	// Check if color flag is not provided correctly, i.e. provided without equal sign.
 	properColorFlag := regexp.MustCompile(`^-color(?:=(.+))?$`)
 	properOutputFlag := regexp.MustCompile(`^-output(?:=(.+))?$`)
+	properReverseFlag := regexp.MustCompile(`^-reverse(?:=(.+))?$`)
 	args := os.Args
 	for _, v := range args {
 		if properColorFlag.MatchString(v) || v == "--color" {
@@ -22,6 +23,9 @@ func main() {
 			return
 		} else if properOutputFlag.MatchString(v) || v == "--output" {
 			fmt.Print("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard\n")
+			return
+		} else if properReverseFlag.MatchString(v) || v == "--reverse" {
+			fmt.Print("Usage: go run . [OPTION]\n\nEX: go run . --reverse=<fileName.txt>\n")
 			return
 		}
 	}
