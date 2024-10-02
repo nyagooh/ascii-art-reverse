@@ -56,6 +56,13 @@ func main() {
 	asciiArt, err := reverse.ArtRetriever(options.InputText, colorCode, options.ColorizeLetters, ASCIIArtMap)
 	check(err)
 
+	// Checking if reverse flag option was passed
+	if options.ReverseFlag != "" {
+		// Reading the text file
+		reverseFile, err := reverse.ReadTextFile(options.ReverseFlag)
+		check(err)
+	}
+
 	// Checking whether the specified output file is a text file.
 	outputFile := ""
 	if options.OutputFlag != "" {
