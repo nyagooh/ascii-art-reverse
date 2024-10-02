@@ -61,6 +61,9 @@ func main() {
 		// Reading the text file
 		reverseFile, err := reverse.ReadTextFile(options.ReverseFlag)
 		check(err)
+
+		// Removing '$' runes from the end of each line, if any
+		processedLines := reverse.ProcessReverseFileLines(reverseFile)
 	}
 
 	// Checking whether the specified output file is a text file.
