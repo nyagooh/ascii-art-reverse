@@ -36,3 +36,26 @@ func ReverseMapCreator(s string, Map map[string]string) (int, int) {
 	}
 	return minWidth, maxWidth
 }
+
+func CreateUniversalMap() (map[string]string, int, int, error) {
+    thinkertoy, err := ReadTextFile("./banners/thinkertoy.txt")
+    if err != nil {
+        return nil, 0, 0, err
+    }
+    standard, err := ReadTextFile("./banners/standard.txt")
+    if err != nil {
+        return nil, 0, 0, err
+    }
+    shadow, err := ReadTextFile("./banners/shadow.txt")
+    if err != nil {
+        return nil, 0, 0, err
+    }
+
+    universalMap := make(map[string]string)
+
+    min, _ := ReverseMapCreator(string(thinkertoy), universalMap)
+    _, _ = ReverseMapCreator(string(standard), universalMap)
+    _, max := ReverseMapCreator(string(shadow), universalMap)
+
+    return universalMap, min, max, nil
+}
