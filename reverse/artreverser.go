@@ -1,6 +1,8 @@
 package reverse
 
-import "strings"
+import (
+	"strings"
+)
 
 func AsciiArtReverser(min, max int, processedLines []string, universalMap map[string]string) string {
 	result := ""
