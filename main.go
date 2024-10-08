@@ -61,9 +61,16 @@ func main() {
 		// Reading the text file
 		reverseFile, err := reverse.ReadTextFile(options.ReverseFlag)
 		check(err)
-
+		universalMap, min, max, err := reverse.CreateUniversalMap()
+        check(err)
 		// Removing '$' runes from the end of each line, if any
 		processedLines := reverse.ProcessReverseFileLines(reverseFile)
+		result := reverse.AsciiArtReverser(min, max, processedLines, universalMap)
+        if strings.Contains(reverseFile, "$") {
+            result = strings.TrimSuffix(result, "\n")
+        }
+        fmt.Print(result)
+        return
 	}
 
 	// Checking whether the specified output file is a text file.
