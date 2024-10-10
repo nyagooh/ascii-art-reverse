@@ -3,33 +3,60 @@ package reverse
 import (
 	"errors"
 	"os"
+	"reflect"
 	"testing"
 )
 
-func TestReadBannerFile(t *testing.T) {
-	// Create a temporary file
-	tmpFile, err := os.CreateTemp("", "test_banner.txt")
-	if err != nil {
-		t.Fatalf("Failed to create temporary file: %v", err)
-	}
-	defer os.Remove(tmpFile.Name())
-	// Write some content to the temporary file
-	content := "Test banner content"
-	if _, err := tmpFile.WriteString(content); err != nil {
-		t.Fatalf("Failed to write to temporary file: %v", err)
-	}
-	// Close the temporary file
-	if err := tmpFile.Close(); err != nil {
-		t.Fatalf("Failed to close temporary file: %v", err)
-	}
-	// Test ReadBannerFile function
-	bannerContent, err := ReadTextFile(tmpFile.Name())
-	if err != nil {
-		t.Errorf("ReadBannerFile returned error: %v", err)
-	}
-	if bannerContent != content {
-		t.Errorf("ReadBannerFile did not read expected content. Got: %s, Expected: %s", bannerContent, content)
-	}
+func TestReadTextFile(t *testing.T) {
+	// Test case 1: Valid txt file
+	t.Run("Valid txt file", func(t *testing.T) {
+		// Create a temporary file
+		tmpFile, err := os.Create("test_banner.txt")
+		if err != nil {
+			t.Fatalf("Failed to create temporary file: %v", err)
+		}
+		defer os.Remove(tmpFile.Name())
+		// Write some content to the temporary file
+		content := "Test banner content"
+		if _, err := tmpFile.WriteString(content); err != nil {
+			t.Fatalf("Failed to write to temporary file: %v", err)
+		}
+		// Close the temporary file
+		if err := tmpFile.Close(); err != nil {
+			t.Fatalf("Failed to close temporary file: %v", err)
+		}
+		// Test ReadBannerFile function
+		bannerContent, err := ReadTextFile(tmpFile.Name())
+		if err != nil {
+			t.Errorf("ReadBannerFile returned error: %v", err)
+		}
+		if bannerContent != content {
+			t.Errorf("ReadBannerFile did not read expected content. Got: %s, Expected: %s", bannerContent, content)
+		}
+	})
+
+	// Test case 2: Non-existent file
+	t.Run("Non-existent file", func(t *testing.T) {
+		_, err := ReadTextFile("non_existent_file.txt")
+		if err == nil {
+			t.Errorf("Expected error for non-existent file, but got nil")
+		}
+	})
+
+	// Test case 3: File without .txt extension
+	t.Run("Invalid file extension", func(t *testing.T) {
+		// Create a temporary non-.txt file
+		tmpFile, err := os.Create("test_banner.invalid")
+		if err != nil {
+			t.Fatalf("Failed to create temporary file: %v", err)
+		}
+		defer os.Remove(tmpFile.Name())
+
+		_, err = ReadTextFile(tmpFile.Name())
+		if err == nil || err.Error() != "error: the file must be a text file with a .txt extension" {
+			t.Errorf("Expected error for invalid file extension, but got: %v", err)
+		}
+	})
 }
 
 func TestMapCreator(t *testing.T) {
@@ -206,5 +233,107 @@ func TestColorize(t *testing.T) {
 	result := Colorize(color, message)
 	if result != expected {
 		t.Errorf("Expected: %s, Got: %s", expected, result)
+	}
+}
+
+func TestProcessReverseFileLines(t *testing.T) {
+	// Test case input
+	fileContent := "line one$\nline two$\nline three$"
+
+	// Expected output
+	expected := []string{
+		"line one",
+		"line two",
+		"line three",
+	}
+
+	// Call the function
+	result := ProcessReverseFileLines(fileContent)
+
+	// Compare the result with the expected output
+	if !reflect.DeepEqual(result, expected) {
+		t.Errorf("Expected %v, but got %v", expected, result)
+	}
+}
+
+func TestExtractAsciiArt(t *testing.T) {
+	// Test case: ASCII art board input
+	board := [][]string{
+		{"*", " ", "*", " ", "*"},
+		{"*", "*", " ", "*", " "},
+		{" ", "*", "*", " ", "*"},
+	}
+
+	// Input parameters
+	startIndex := 1
+	width := 3
+
+	// Expected output: substring of the ASCII art
+	expected := " * * *** "
+
+	// Call the function
+	result := ExtractAsciiArt(board, startIndex, width)
+
+	// Compare the result with the expected output
+	if result != expected {
+		t.Errorf("Expected %q, but got %q", expected, result)
+	}
+}
+
+func TestReverseMapCreator(t *testing.T) {
+	// Simulated banner content where each character is represented by 8 lines of ASCII art
+	bannerContent := `
+      
+      
+      
+      
+      
+      
+      
+      
+
+ _  
+| | 
+| | 
+| | 
+|_| 
+(_) 
+    
+    
+
+ _ _  
+( | ) 
+ V V  
+      
+      
+      
+      
+      
+`
+
+	// Initialize an empty map
+	asciiMap := make(map[string]string)
+
+	// Call the function with the banner content
+	minWidth, maxWidth := ReverseMapCreator(bannerContent, asciiMap)
+
+	// Define expected values for min and max width
+	expectedMinWidth := 4
+	expectedMaxWidth := 6
+
+	// Check if minWidth and maxWidth are as expected
+	if minWidth != expectedMinWidth {
+		t.Errorf("Expected minWidth %d, but got %d", expectedMinWidth, minWidth)
+	}
+	if maxWidth != expectedMaxWidth {
+		t.Errorf("Expected maxWidth %d, but got %d", expectedMaxWidth, maxWidth)
+	}
+
+	// Check if the map was created correctly (checking for one ASCII art character)
+	expectedChar := " "
+	expectedArt := "                                                "
+
+	if asciiMap[expectedArt] != expectedChar {
+		t.Errorf("Expected map entry for %q, but got %q", expectedArt, asciiMap[expectedArt])
 	}
 }
