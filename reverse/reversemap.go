@@ -5,19 +5,28 @@ import (
 )
 
 func ReverseMapCreator(s string, Map map[string]string) (int, int) {
+	// Initialize minWidth to largest uint8 value and maxWidth to 0
 	minWidth := int(^uint8(0) >> 1)
 	maxWidth := 0
+
+
 	var lines []string
 	printableRune := rune(32)
+
+	// Deal with windows style line endings
 	if strings.ContainsRune(s, '\r') {
 		lines = strings.Split(s, "\r\n")
 	} else {
 		lines = strings.Split(s, "\n")
 	}
+
+	// Process the lines and map each art to it's corresponding ASCII character
 	for i := 0; i < len(lines); i++ {
+		// Determine the thinnest ASCII art
 		if lines[i] != "" && len(lines[i]) < minWidth {
 			minWidth = len(lines[i])
 		}
+		// Determine the thickest ASCII art
 		if len(lines[i]) > maxWidth {
 			maxWidth = len(lines[i])
 		}
@@ -40,24 +49,58 @@ func ReverseMapCreator(s string, Map map[string]string) (int, int) {
 }
 
 func CreateUniversalMap() (map[string]string, int, int, error) {
+	// Read the 'thinkertoy' banner
 	thinkertoy, err := ReadTextFile("./banners/thinkertoy.txt")
 	if err != nil {
 		return nil, 0, 0, err
 	}
+
+	// Read the 'standard' banner
 	standard, err := ReadTextFile("./banners/standard.txt")
 	if err != nil {
 		return nil, 0, 0, err
 	}
+
+	// Read the 'shadow' banner
 	shadow, err := ReadTextFile("./banners/shadow.txt")
 	if err != nil {
 		return nil, 0, 0, err
 	}
 
+	// Create the universal map to store ASCII art to character mappings
 	universalMap := make(map[string]string)
 
-	min, _ := ReverseMapCreator(thinkertoy, universalMap)
-	_, _ = ReverseMapCreator(standard, universalMap)
-	_, max := ReverseMapCreator(shadow, universalMap)
+	// Initialize minWidth to largest uint8 value and maxWidth to 0
+	minWidth := int(^uint8(0) >> 1)
+	maxWidth := 0
 
-	return universalMap, min, max, nil
+	// Map 'thinkertoy' and update minWidth and maxWidth
+	min, max := ReverseMapCreator(thinkertoy, universalMap)
+	if min < minWidth {
+		minWidth = min
+	}
+	if max > maxWidth {
+		maxWidth = max
+	}
+
+	// Map 'standard' and update minWidth and maxWidth
+	min, max = ReverseMapCreator(standard, universalMap)
+	if min < minWidth {
+		minWidth = min
+	}
+	if max > maxWidth {
+		maxWidth = max
+	}
+
+	// Map 'shadow' and update minWidth and maxWidth
+	min, max = ReverseMapCreator(shadow, universalMap)
+	if min < minWidth {
+		minWidth = min
+	}
+	if max > maxWidth {
+		maxWidth = max
+	}
+
+	// Return the universal map and dynamically determined min and max widths
+	return universalMap, minWidth, maxWidth, nil
 }

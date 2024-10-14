@@ -343,24 +343,24 @@ func TestReverseMapCreator(t *testing.T) {
 }
 
 func TestAsciiArtReverser(t *testing.T) {
-	// Define the input processed lines (each 8 lines correspond to an ASCII character)
+	// Define the input processed lines (each 8 lines correspond to ASCII art representation to be reversed)
 	processedLines := []string{
-		" _    _          _   _          ",  // First line of character A
-		"| |  | |        | | | |         ",  // Second line of character A
-		"| |__| |   ___  | | | |   ___   ",  // ...
+		" _    _          _   _          ",
+		"| |  | |        | | | |         ",
+		"| |__| |   ___  | | | |   ___   ",
 		"|  __  |  / _ \\ | | | |  / _ \\  ",
 		"| |  | | |  __/ | | | | | (_) | ",
 		"|_|  |_|  \\___| |_| |_|  \\___/  ",
 		"                                ",
-		"                                ",  // End of character A
+		"                                ",
 	}
 
 	// Define the universal map that will map ASCII art blocks to letters
 	universalMap := map[string]string{
 		` _    _  | |  | | | |__| | |  __  | | |  | | |_|  |_|                   `: "H",
-		`                ___   / _ \ |  __/  \___|               `: "e",
-		` _  | | | | | | | | |_|         `: "l",
-		`                  ___    / _ \  | (_) |  \___/                  `: "o",
+		`                ___   / _ \ |  __/  \___|               `:                 "e",
+		` _  | | | | | | | | |_|         `:                                         "l",
+		`                  ___    / _ \  | (_) |  \___/                  `:         "o",
 		// More mappings can be added as needed
 	}
 
@@ -368,7 +368,7 @@ func TestAsciiArtReverser(t *testing.T) {
 	min := 4
 	max := 9
 
-	// Call the function you want to test
+	// Call the function to test
 	result := AsciiArtReverser(min, max, processedLines, universalMap)
 
 	// Define the expected result (the text that should be produced from the ASCII art)
@@ -379,4 +379,3 @@ func TestAsciiArtReverser(t *testing.T) {
 		t.Errorf("Expected '%s' but got '%s'", expected, result)
 	}
 }
-
