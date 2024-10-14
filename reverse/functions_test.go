@@ -195,6 +195,10 @@ func TestSetColor(t *testing.T) {
 		expected string
 		hasError bool
 	}{
+		// Test no color flag provided (empty string)
+		{"Flag not provided", "", "", false},
+
+		// Test named color
 		{"Red", "red", "\033[38;5;196m", false},
 
 		// Test hexadecimal colors
@@ -337,3 +341,42 @@ func TestReverseMapCreator(t *testing.T) {
 		t.Errorf("Expected map entry for %q, but got %q", expectedArt, asciiMap[expectedArt])
 	}
 }
+
+func TestAsciiArtReverser(t *testing.T) {
+	// Define the input processed lines (each 8 lines correspond to an ASCII character)
+	processedLines := []string{
+		" _    _          _   _          ",  // First line of character A
+		"| |  | |        | | | |         ",  // Second line of character A
+		"| |__| |   ___  | | | |   ___   ",  // ...
+		"|  __  |  / _ \\ | | | |  / _ \\  ",
+		"| |  | | |  __/ | | | | | (_) | ",
+		"|_|  |_|  \\___| |_| |_|  \\___/  ",
+		"                                ",
+		"                                ",  // End of character A
+	}
+
+	// Define the universal map that will map ASCII art blocks to letters
+	universalMap := map[string]string{
+		` _    _  | |  | | | |__| | |  __  | | |  | | |_|  |_|                   `: "H",
+		`                ___   / _ \ |  __/  \___|               `: "e",
+		` _  | | | | | | | | |_|         `: "l",
+		`                  ___    / _ \  | (_) |  \___/                  `: "o",
+		// More mappings can be added as needed
+	}
+
+	// Define the min and max width of the ASCII characters
+	min := 4
+	max := 9
+
+	// Call the function you want to test
+	result := AsciiArtReverser(min, max, processedLines, universalMap)
+
+	// Define the expected result (the text that should be produced from the ASCII art)
+	expected := "Hello\n"
+
+	// Compare the result to the expected value
+	if result != expected {
+		t.Errorf("Expected '%s' but got '%s'", expected, result)
+	}
+}
+

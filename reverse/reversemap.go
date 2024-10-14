@@ -48,10 +48,6 @@ func CreateUniversalMap() (map[string]string, int, int, error) {
 	if err != nil {
 		return nil, 0, 0, err
 	}
-	rounded, err := ReadTextFile("./banners/rounded.txt")
-	if err != nil {
-		return nil, 0, 0, err
-	}
 	shadow, err := ReadTextFile("./banners/shadow.txt")
 	if err != nil {
 		return nil, 0, 0, err
@@ -60,7 +56,6 @@ func CreateUniversalMap() (map[string]string, int, int, error) {
 	universalMap := make(map[string]string)
 
 	min, _ := ReverseMapCreator(thinkertoy, universalMap)
-	_, _ = ReverseMapCreator(rounded, universalMap)
 	_, _ = ReverseMapCreator(standard, universalMap)
 	_, max := ReverseMapCreator(shadow, universalMap)
 
