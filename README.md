@@ -4,7 +4,7 @@ This project is a Go-based tool that reverses an ASCII art image, flipping ascii
 
 ## Features
 
-- Flip ASCII art to its original state
+- Flip ASCII art to its original state.It also handles ascii art with the dollar sign delimeter.
 - Write text in  ascii format with or without the banner file being specified.
 - Write text in ascii format in a specified file.
 - Colour text which is written in ascii format.
@@ -29,28 +29,24 @@ Before using this tool, ensure that you have the following installed:
     cd ascii-art-reverse
     ```
 
-3. Build the project:
-
-    ```bash
-    go build
-    ```
-
 ## Usage
 
 To reverse an ASCII art:
 
 1. Prepare your ASCII art in a text file, for example, `art.txt`.
-2. Run the following command:
+    ```bash
+    go run . --output=art.txt Hello
+    ```
+2. Reverse the art to its origanal state by running the following command:
 
     ```bash
     go run . --reverse=art.txt
     ```
-
-3. The output will be the reversed ASCII art printed in the terminal.
-```bash
-  Hello
- ```
-### Example 1: Simple Face
+3. The output will be
+   ```bash
+   Hello
+   ```
+### Example 1: 
 
 Given the following input in `art.txt`:
 ```bash
@@ -64,7 +60,10 @@ Given the following input in `art.txt`:
                                 
 
 ```
-
+The output will be:
+```bash
+Hello
+```
 These example show how  ASCII art is flipped .
 
 ## Contributing
