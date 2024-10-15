@@ -1,21 +1,40 @@
 package reverse
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 // ProcessReverseFileLines split input string into lines and checks for and removes any custom delimiter "$"
 // from the end of each line, and returns the processed lines as a slice of strings
-func ProcessReverseFileLines(fileContent string) []string {
-
+func ProcessReverseFileLines(fileContent string) ([]string, error) {
 	lines := strings.Split(fileContent, "\n")
 
 	processedLines := make([]string, 0, len(lines))
 
+	var firstLineLength int
 	for _, line := range lines {
 		line = strings.TrimSuffix(line, "$")
+		if len(line) > 0 {
+			firstLineLength = len(line)
+			break
+		}
+	}
+
+	for _, line := range lines {
+		line = strings.TrimSuffix(line, "$")
+
+		// If the line is not empty, check its length
+		if len(line) > 0 {
+			if len(line) != firstLineLength {
+				return nil, errors.New("error: irregular ASCII art, all lines must have the same length")
+			}
+		}
+
 		processedLines = append(processedLines, line)
 	}
 
-	return processedLines
+	return processedLines, nil
 }
 
 // ExtractAsciiArt extracts a specific section of ASCII art from the 2D board starting

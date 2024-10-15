@@ -1,10 +1,11 @@
 package reverse
 
 import (
+	"log"
 	"strings"
 )
 
-// AsciiArtReverser takes the minimum and maximum widths of ASCII art characters, 
+// AsciiArtReverser takes the minimum and maximum widths of ASCII art characters,
 // a slice of processed lines from the input file, and a universal map that maps ASCII art to characters.
 // It returns the original text by reversing the ASCII art representation.
 func AsciiArtReverser(min, max int, processedLines []string, universalMap map[string]string) string {
@@ -32,6 +33,8 @@ func AsciiArtReverser(min, max int, processedLines []string, universalMap map[st
 
 			// Process the board by extracting ASCII art characters starting at currentIndex
 			for currentIndex < len(board[0]) {
+				foundMatch := false // Keep track of whether we found a matching width
+
 				// Try widths from the minimum to the maximum defined width
 				for width := min; width <= max; width++ {
 					// If the currentIndex exceeds the length of the line, stop the process
@@ -47,8 +50,12 @@ func AsciiArtReverser(min, max int, processedLines []string, universalMap map[st
 						// If found, append the corresponding character to the result string
 						result += char
 						currentIndex += width // Move the index forward by the width of the ASCII art
+						foundMatch = true // Indicate that we found a match
 						break // Stop checking other widths once a match is found
 					}
+				}
+				if !foundMatch {
+					log.Fatalf("error: Irregular ASCII art could not be converted starting from column index %d of the 2D ASCII Art representation\n", currentIndex)
 				}
 			}
 

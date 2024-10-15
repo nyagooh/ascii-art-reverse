@@ -241,24 +241,53 @@ func TestColorize(t *testing.T) {
 }
 
 func TestProcessReverseFileLines(t *testing.T) {
-	// Test case input
-	fileContent := "line one$\nline two$\nline three$"
+	// Test case 1: Valid input with equal line lengths
+	t.Run("Valid input", func(t *testing.T) {
+		// Test case input
+		fileContent := "line one$\nline two$\nline six$"
 
-	// Expected output
-	expected := []string{
-		"line one",
-		"line two",
-		"line three",
-	}
+		// Expected output
+		expected := []string{
+			"line one",
+			"line two",
+			"line six",
+		}
 
-	// Call the function
-	result := ProcessReverseFileLines(fileContent)
+		// Call the function
+		result, err := ProcessReverseFileLines(fileContent)
 
-	// Compare the result with the expected output
-	if !reflect.DeepEqual(result, expected) {
-		t.Errorf("Expected %v, but got %v", expected, result)
-	}
+		// Check for errors
+		if err != nil {
+			t.Errorf("Expected no error, but got %v", err)
+		}
+
+		// Compare the result with the expected output
+		if !reflect.DeepEqual(result, expected) {
+			t.Errorf("Expected %v, but got %v", expected, result)
+		}
+	})
+
+	// Test case 2: Invalid input with unequal line lengths
+	t.Run("Unequal line lengths", func(t *testing.T) {
+		// Test case input with unequal lengths
+		fileContent := "line one$\nline two$\nline three$"
+
+		// Call the function and expect an error
+		_, err := ProcessReverseFileLines(fileContent)
+
+		// Check if the error is as expected
+		if err == nil {
+			t.Error("Expected an error due to unequal line lengths, but got nil")
+		}
+
+		// Optional: you can check if the error message is correct
+		expectedErrMsg := "error: irregular ASCII art, all lines must have the same length"
+		if err != nil && err.Error() != expectedErrMsg {
+			t.Errorf("Expected error message %v, but got %v", expectedErrMsg, err.Error())
+		}
+	})
 }
+
 
 func TestExtractAsciiArt(t *testing.T) {
 	// Test case: ASCII art board input
