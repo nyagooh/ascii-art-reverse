@@ -64,9 +64,9 @@ func main() {
 		universalMap, min, max, err := reverse.CreateUniversalMap()
         check(err)
 		// Removing '$' runes from the end of each line, if any
-		processedLines, err := reverse.ProcessReverseFileLines(reverseFile)
+		processedLines := reverse.ProcessReverseFileLines(reverseFile)
+		result, err := reverse.AsciiArtReverser(min, max, processedLines, universalMap)
 		check(err)
-		result := reverse.AsciiArtReverser(min, max, processedLines, universalMap)
         if strings.Contains(reverseFile, "$") {
             result = strings.TrimSuffix(result, "\n")
         }

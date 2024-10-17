@@ -254,12 +254,8 @@ func TestProcessReverseFileLines(t *testing.T) {
 		}
 
 		// Call the function
-		result, err := ProcessReverseFileLines(fileContent)
+		result := ProcessReverseFileLines(fileContent)
 
-		// Check for errors
-		if err != nil {
-			t.Errorf("Expected no error, but got %v", err)
-		}
 
 		// Compare the result with the expected output
 		if !reflect.DeepEqual(result, expected) {
@@ -267,25 +263,6 @@ func TestProcessReverseFileLines(t *testing.T) {
 		}
 	})
 
-	// Test case 2: Invalid input with unequal line lengths
-	t.Run("Unequal line lengths", func(t *testing.T) {
-		// Test case input with unequal lengths
-		fileContent := "line one$\nline two$\nline three$"
-
-		// Call the function and expect an error
-		_, err := ProcessReverseFileLines(fileContent)
-
-		// Check if the error is as expected
-		if err == nil {
-			t.Error("Expected an error due to unequal line lengths, but got nil")
-		}
-
-		// Optional: you can check if the error message is correct
-		expectedErrMsg := "error: irregular ASCII art, all lines must have the same length"
-		if err != nil && err.Error() != expectedErrMsg {
-			t.Errorf("Expected error message %v, but got %v", expectedErrMsg, err.Error())
-		}
-	})
 }
 
 
@@ -398,7 +375,10 @@ func TestAsciiArtReverser(t *testing.T) {
 	max := 9
 
 	// Call the function to test
-	result := AsciiArtReverser(min, max, processedLines, universalMap)
+	result, err := AsciiArtReverser(min, max, processedLines, universalMap)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	// Define the expected result (the text that should be produced from the ASCII art)
 	expected := "Hello\n"
